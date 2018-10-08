@@ -554,6 +554,18 @@ blog post, sorted by tags, but no post body."
   (interactive)
   (find-file (org-static-blog-matching-publish-filename (buffer-file-name))))
 
+
+(defun org-static-blog-preview-start ()
+  "Preivew the site."
+  (interactive)
+  (org-static-blog-publish)
+  (httpd-serve-directory org-static-blog-publish-directory)
+  (browse-url (format "http://%s:%d" "127.0.0.1" httpd-port)))
+
+(defun org-static-blog-preview-stop ()
+  (interactive)
+  (httpd-stop))
+
 ;;;###autoload
 (defun org-static-blog-create-new-post ()
   "Creates a new blog post.
@@ -582,6 +594,8 @@ choose."
 (define-key org-static-blog-mode-map (kbd "C-c C-b") 'org-static-blog-open-previous-post)
 (define-key org-static-blog-mode-map (kbd "C-c C-p") 'org-static-blog-open-matching-publish-file)
 (define-key org-static-blog-mode-map (kbd "C-c C-n") 'org-static-blog-create-new-post)
+(define-key org-static-blog-mode-map (kbd "C-c C-w") 'org-static-blog-preview-start)
+(define-key org-static-blog-mode-map (kbd "C-c C-w k") 'org-static-blog-preview-stop)
 
 (provide 'org-static-blog)
 
